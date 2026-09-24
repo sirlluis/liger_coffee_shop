@@ -1,0 +1,19 @@
+ingredient_id,name,unit_of_measure,unit_cost,category
+1,Café en grano,kg,220.0,granos
+2,Leche entera,l,24.0,lacteos
+3,Leche de avena,l,45.0,lacteos
+4,Jarabe de vainilla,ml,0.35,saborizantes
+5,Jarabe de caramelo,ml,0.35,saborizantes
+6,Chocolate en polvo,kg,180.0,saborizantes
+7,Hielo,kg,6.0,otros
+8,Pan de sándwich,unidad,4.5,panaderia
+9,Jamón,kg,140.0,carnes
+10,Queso manchego,kg,160.0,lacteos
+11,Pan de concha,unidad,12.0,panaderia
+12,Mantequilla,kg,130.0,lacteos
+13,Té negro (bolsitas),unidad,1.8,otros
+14,Agua de horchata (concentrado),l,55.0,otros
+15,Vaso desechable 12oz,unidad,1.2,empaques
+16,Vaso desechable 16oz,unidad,1.5,empaques
+17,Servilletas/empaque,unidad,0.8,empaques
+18,Azúcar,kg,22.0,otros

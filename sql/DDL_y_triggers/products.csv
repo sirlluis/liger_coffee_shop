@@ -1,0 +1,13 @@
+product_id,name,category,unit_price
+1,Latte caliente,bebida_caliente,55.0
+2,Cappuccino,bebida_caliente,52.0
+3,Café americano,bebida_caliente,38.0
+4,Chocolate caliente,bebida_caliente,50.0
+5,Té caliente,bebida_caliente,35.0
+6,Frappé de caramelo,bebida_fria,62.0
+7,Latte helado,bebida_fria,58.0
+8,Café de olla frío,bebida_fria,45.0
+9,Agua de horchata,bebida_fria,40.0
+10,Sándwich jamón/queso,comida,68.0
+11,Concha,panaderia,28.0
+12,Té helado,bebida_fria,38.0
