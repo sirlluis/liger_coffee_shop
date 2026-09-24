@@ -26,8 +26,8 @@ la diferencia. Si Postgres dice, sumando todos los movimientos, que deberían qu
 quantity = -1.5 para que el sistema quede alineado con la realidad.*/
 /* Nota 18: order_item_id y purchase_id son ambas nullable (no llevan NOT NULL) porque ningún movimiento necesita las dos, y algunos (merma, ajuste) no necesitan ninguna. Cada fila usa como
 máximo una de las dos, nunca ambas. Esto es porque o el movimiento es de venta (order_item_id) o de compra (purchase_id), o ninguno (merma,ajuste,etc.)*/
-/*Nota 19: CHECK dentro de movements es necesario porque relacionas los tipos de movimiento con sus respectivas claves foráneas (por ejemplo sale unicamente con order_item_id). Así evitas que por
-ejemplo en movement_type tengas "sale" pero con order_item_id vacío y purchase_id lleno */
+/* Nota 19: CHECK dentro de movements es necesario porque relacionas los tipos de movimiento con sus respectivas claves foráneas (por ejemplo sale unicamente con order_item_id). Así evitas que por
+ejemplo en movement_type tengas 'sale' pero con order_item_id vacío y purchase_id lleno */
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -73,8 +73,8 @@ CREATE TABLE  orders (
     order_id        BIGSERIAL PRIMARY KEY,
     branch_id       BIGINT NOT NULL REFERENCES branches(branch_id) ON DELETE RESTRICT,
     created_at      TIMESTAMP NOT NULL,
-    in_or_out       TEXT NOT NULL CHECK (in_or_out IN ("dine_in", "take_out")), --Nota 15 
-    payment_method  TEXT NOT NULL CHECK (payment_method IN ("cash","card"))
+    in_or_out       TEXT NOT NULL CHECK (in_or_out IN ('dine_in', 'take_out')), --Nota 15 
+    payment_method  TEXT NOT NULL CHECK (payment_method IN ('cash','card'))
 );
 
 ------ items de cada pedido ------
@@ -101,16 +101,16 @@ CREATE TABLE purchases (
 CREATE TABLE inventory_movements (
     movement_id     BIGSERIAL PRIMARY KEY,
     ingredient_id   BIGINT NOT NULL REFERENCES ingredients(ingredient_id) ON DELETE RESTRICT,
-    movement_type   TEXT NOT NULL CHECK (movement_type IN ("sale","purchase","waste","adjustment")), --revisar nota 17
+    movement_type   TEXT NOT NULL CHECK (movement_type IN ('sale','purchase','waste','adjustment')), --revisar nota 17
     quantity        NUMERIC(12,3) NOT NULL, --No ponemos CHECK (quantity >=0) porque puede ser negativo cuando sale inventario (venta, merma), o positivo cuando entra (compra).
     order_item_id   BIGINT REFERENCES order_items(order_item_id) ON DELETE RESTRICT, -- es nullable (no tiene not null) porque solo aplica para sale. 
     purchase_id     BIGINT REFERENCES purchases(purchase_id) ON DELETE RESTRICT, -- es nullable (no tiene not null) porque solo aplica para compras. 
     occurred_at     TIMESTAMP NOT NULL,
     notes           TEXT,
     CONSTRAINT chk_movement_origen CHECK (
-        (movement_type = "sale"     AND order_item_id IS NOT NULL AND purchase_id IS NULL) OR
-        (movement_type = "purchase" AND purchase_id IS NOT NULL AND order_item_id IS NULL) OR
-        (movement_type IN ("waste", "adjustment") AND order_item_id IS NULL AND purchase_id IS NULL)
+        (movement_type = 'sale'     AND order_item_id IS NOT NULL AND purchase_id IS NULL) OR
+        (movement_type = 'purchase' AND purchase_id IS NOT NULL AND order_item_id IS NULL) OR
+        (movement_type IN ('waste', 'adjustment') AND order_item_id IS NULL AND purchase_id IS NULL)
     )
 );
 
@@ -141,10 +141,10 @@ CREATE OR REPLACE FUNCTION register_sale()
 RETURNS TRIGGER AS $$
 BEGIN
     -- Para cada insumo en la receta del producto vendido, inserta un movimiento de salida de inventario
-    INSERT INTO inventory_movements (ingredients_id, movement_type, quantity, order_item_id, occurred_at)
+    INSERT INTO inventory_movements (ingredient_id, movement_type, quantity, order_item_id, occurred_at)
     SELECT
-        r.ingredients_id,
-        "sale",
+        r.ingredient_id,
+        'sale',
         -1 * r.quantity_required * NEW.quantity, --quantity corresponde a la cantidad de productos vendidos en order_items, y quantity_required es la cantidad de insumo que se necesita para hacer un producto. 
         NEW.order_item_id, --se genera una nueva fila en inventory_movements para cada insumo de la receta del producto vendido, y se asocia con el order_item_id correspondiente.
         (SELECT created_at FROM orders WHERE order_id = NEW.order_id) --order_items no tiene su propia fecha/hora, a toma prestada de la tabla orders.
@@ -167,7 +167,7 @@ CREATE OR REPLACE FUNCTION registrar_compra()
 RETURNS TRIGGER AS $$
 BEGIN
     INSERT INTO inventory_movements (ingredient_id, movement_type, quantity, purchase_id, occurred_at)
-    VALUES (NEW.ingredient_id, 'purchase', NEW.quantity, NEW.purchase_id, NEW.purchased_at);
+    VALUES (NEW.ingredient_id, "purchase", NEW.quantity, NEW.purchase_id, NEW.purchased_at);
 
     RETURN NEW;
 END;
@@ -180,9 +180,9 @@ EXECUTE FUNCTION registrar_compra();
 
 
 -------------------------------------------------------------------------------------------------------------------------------
-/*Nota 30: Los índices son útiles para mejorar el rendimiento de las consultas. (Analogía: es como el índice al final de un libro de texto, al buscar la palabra "merma", vas directo al índice, 
+/* Nota 30: Los índices son útiles para mejorar el rendimiento de las consultas. (Analogía: es como el índice al final de un libro de texto, al buscar la palabra "merma", vas directo al índice, 
 encuentras "merma... página 214", y saltas ahí. Sin índice, Postgres tiene que revisar cada fila de la tabla una por una para encontrar lo que buscas ["sequential scan"]; con índice, salta casi 
-directo a las filas que coinciden). */
+directo a las filas que coinciden).*/
 -------------------------------------------------------------------------------------------------------------------------------
 
 ------ Indices ------
