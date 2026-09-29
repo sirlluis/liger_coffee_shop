@@ -167,7 +167,7 @@ CREATE OR REPLACE FUNCTION registrar_compra()
 RETURNS TRIGGER AS $$
 BEGIN
     INSERT INTO inventory_movements (ingredient_id, movement_type, quantity, purchase_id, occurred_at)
-    VALUES (NEW.ingredient_id, "purchase", NEW.quantity, NEW.purchase_id, NEW.purchased_at);
+    VALUES (NEW.ingredient_id, 'purchase', NEW.quantity, NEW.purchase_id, NEW.purchased_at);
 
     RETURN NEW;
 END;

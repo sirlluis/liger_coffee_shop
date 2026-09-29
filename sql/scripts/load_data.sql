@@ -6,7 +6,7 @@
 
 \copy public.recipes(recipe_id, product_id, ingredient_id, quantity_required) FROM 'c:/Users/Mi PC/Desktop/liger_coffee_shop/data/raw/recipes.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
 
-\copy public.orders(order_id, branch_id, created_at, in_or_out, payment_method) FROM 'c:/Users/Mi PC/Desktop/liger_coffee_shop/data/raw/orders.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
+\copy public.orders(order_id, branch_id, created_at, in_or_out, payment_method) FROM 'c:/Users/Mi PC/Desktop/liger_coffee_shop/data/processed/orders.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
 
 \copy public.order_items(order_item_id, order_id, product_id, quantity, sale_price) FROM 'c:/Users/Mi PC/Desktop/liger_coffee_shop/data/raw/order_items.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
 
