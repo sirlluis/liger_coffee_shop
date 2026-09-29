@@ -12,4 +12,15 @@
 
 \copy public.purchases(purchase_id, ingredient_id, branch_id, quantity, unit_cost_real, supplier_name, purchased_at) FROM 'c:/Users/Mi PC/Desktop/liger_coffee_shop/data/raw/purchases.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
 
-\copy public.inventory_movements(movement_id, ingredient_id, movement_type, quantity, order_item_id, purchase_id, occurred_at, notes) FROM 'c:/Users/Mi PC/Desktop/liger_coffee_shop/data/raw/inventory_movements.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
+\copy public.inventory_movements(movement_id, ingredient_id, movement_type, quantity, order_item_id, purchase_id, occurred_at, notes) FROM 'C:\Users\brenn\Documents\Ilse\Proyecto1LigerInsights\liger_coffee_shop\data\raw\inventory_movements.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
+
+
+-- Los CSVs traen IDs explícitos; hay que sincronizar las secuencias de los
+-- BIGSERIAL para que el próximo INSERT sin ID no choque con uno ya cargado.
+SELECT setval('ingredients_ingredient_id_seq', (SELECT MAX(ingredient_id) FROM ingredients));
+SELECT setval('products_product_id_seq', (SELECT MAX(product_id) FROM products));
+SELECT setval('recipes_recipe_id_seq', (SELECT MAX(recipe_id) FROM recipes));
+SELECT setval('orders_order_id_seq', (SELECT MAX(order_id) FROM orders));
+SELECT setval('order_items_order_item_id_seq', (SELECT MAX(order_item_id) FROM order_items));
+SELECT setval('purchases_purchase_id_seq', (SELECT MAX(purchase_id) FROM purchases));
+SELECT setval('inventory_movements_movement_id_seq', (SELECT MAX(movement_id) FROM inventory_movements));
