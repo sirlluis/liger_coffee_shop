@@ -1,0 +1,76 @@
+[0m22:37:47.823885 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001BE5BDA2120>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001BE59930B90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001BE5E70F890>]}
+
+
+============================== 22:37:47.828794 | 6e6e4888-ab8f-49b8-9665-3122dc1c61ce ==============================
+[0m22:37:47.828794 [info ] [MainThread]: Running with dbt=1.12.5
+[0m22:37:47.829572 [debug] [MainThread]: running dbt with arguments {'version_check': 'True', 'no_print': 'None', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'maximum_seed_size_mib': '1', 'target_path': 'None', 'printer_width': '80', 'write_json': 'True', 'empty': 'None', 'log_cache_events': 'False', 'introspect': 'True', 'cache_selected_only': 'False', 'log_format': 'default', 'debug': 'False', 'fail_fast': 'False', 'profiles_dir': 'C:\\Users\\brenn\\.dbt', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'partial_parse': 'True', 'indirect_selection': 'eager', 'hints_enabled': 'True', 'invocation_command': 'dbt init dbt_coffee', 'use_experimental_parser': 'False', 'use_colors': 'True', 'log_path': 'logs'}
+[0m22:37:47.860923 [debug] [MainThread]: Starter project path: C:\Users\brenn\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\dbt\include\starter_project
+[0m22:37:47.895975 [info ] [MainThread]: Setting up your profile.
+[0m22:39:05.341784 [info ] [MainThread]: Profile dbt_coffee written to C:\Users\brenn\.dbt\profiles.yml using target's profile_template.yml and your supplied values.
+[0m22:39:05.348307 [info ] [MainThread]: Running dbt debug to validate the project...
+[0m22:39:05.349886 [info ] [MainThread]: dbt version: 1.12.5
+[0m22:39:05.350759 [info ] [MainThread]: python version: 3.14.7
+[0m22:39:05.352895 [info ] [MainThread]: python path: C:\Users\brenn\AppData\Local\Python\pythoncore-3.14-64\python.exe
+[0m22:39:05.354446 [info ] [MainThread]: os info: Windows-11-10.0.26200-SP0
+[0m22:39:05.425198 [info ] [MainThread]: Using profiles dir at C:\Users\brenn\.dbt
+[0m22:39:05.426008 [info ] [MainThread]: Using profiles.yml file at C:\Users\brenn\.dbt\profiles.yml
+[0m22:39:05.426556 [info ] [MainThread]: Using dbt_project.yml file at C:\Users\brenn\Documents\Ilse\Proyecto1LigerInsights\liger_coffee_shop\dbt_coffee\dbt_project.yml
+[0m22:39:05.427744 [info ] [MainThread]: adapter type: postgres
+[0m22:39:05.428270 [info ] [MainThread]: adapter version: 1.11.0
+[0m22:39:05.618462 [info ] [MainThread]: Configuration:
+[0m22:39:05.619183 [info ] [MainThread]:   profiles.yml file [[32mOK found and valid[0m]
+[0m22:39:05.619766 [info ] [MainThread]:   dbt_project.yml file [[32mOK found and valid[0m]
+[0m22:39:05.620363 [info ] [MainThread]: Required dependencies:
+[0m22:39:05.621106 [debug] [MainThread]: Executing "git --help"
+[0m22:39:05.678897 [debug] [MainThread]: STDOUT: "b"usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]\n           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]\n           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]\n           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]\n           [--config-env=<name>=<envvar>] <command> [<args>]\n\nThese are common Git commands used in various situations:\n\nstart a working area (see also: git help tutorial)\n   clone     Clone a repository into a new directory\n   init      Create an empty Git repository or reinitialize an existing one\n\nwork on the current change (see also: git help everyday)\n   add       Add file contents to the index\n   mv        Move or rename a file, a directory, or a symlink\n   restore   Restore working tree files\n   rm        Remove files from the working tree and from the index\n\nexamine the history and state (see also: git help revisions)\n   bisect    Use binary search to find the commit that introduced a bug\n   diff      Show changes between commits, commit and working tree, etc\n   grep      Print lines matching a pattern\n   log       Show commit logs\n   show      Show various types of objects\n   status    Show the working tree status\n\ngrow, mark and tweak your common history\n   branch    List, create, or delete branches\n   commit    Record changes to the repository\n   merge     Join two or more development histories together\n   rebase    Reapply commits on top of another base tip\n   reset     Reset current HEAD to the specified state\n   switch    Switch branches\n   tag       Create, list, delete or verify a tag object signed with GPG\n\ncollaborate (see also: git help workflows)\n   fetch     Download objects and refs from another repository\n   pull      Fetch from and integrate with another repository or a local branch\n   push      Update remote refs along with associated objects\n\n'git help -a' and 'git help -g' list available subcommands and some\nconcept guides. See 'git help <command>' or 'git help <concept>'\nto read about a specific subcommand or concept.\nSee 'git help git' for an overview of the system.\n""
+[0m22:39:05.679508 [debug] [MainThread]: STDERR: "b''"
+[0m22:39:05.679987 [info ] [MainThread]:  - git [[32mOK found[0m]
+
+[0m22:39:05.680609 [info ] [MainThread]: Connection:
+[0m22:39:05.681090 [info ] [MainThread]:   host: ep-purple-cloud-b5s2844y.c-7.us-east-2.aws.neon.tech
+[0m22:39:05.681720 [info ] [MainThread]:   port: 5432
+[0m22:39:05.682392 [info ] [MainThread]:   user: neondb_owner
+[0m22:39:05.682985 [info ] [MainThread]:   database: neondb
+[0m22:39:05.683489 [info ] [MainThread]:   schema: public
+[0m22:39:05.683949 [info ] [MainThread]:   connect_timeout: 10
+[0m22:39:05.684502 [info ] [MainThread]:   role: None
+[0m22:39:05.684989 [info ] [MainThread]:   search_path: None
+[0m22:39:05.685512 [info ] [MainThread]:   keepalives_idle: 0
+[0m22:39:05.686839 [info ] [MainThread]:   sslmode: None
+[0m22:39:05.688764 [info ] [MainThread]:   sslcert: None
+[0m22:39:05.689406 [info ] [MainThread]:   sslkey: None
+[0m22:39:05.689871 [info ] [MainThread]:   sslrootcert: None
+[0m22:39:05.690471 [info ] [MainThread]:   application_name: dbt
+[0m22:39:05.690907 [info ] [MainThread]:   autocommit: False
+[0m22:39:05.691463 [info ] [MainThread]:   retries: 1
+[0m22:39:05.692789 [info ] [MainThread]: Registered adapter: postgres=1.11.0
+[0m22:39:06.112152 [debug] [MainThread]: Acquiring new postgres connection 'debug'
+[0m22:39:06.252524 [debug] [MainThread]: Using postgres connection "debug"
+[0m22:39:06.252970 [debug] [MainThread]: On debug: select 1 as id
+[0m22:39:06.253322 [debug] [MainThread]: Opening a new connection, currently in state init
+[0m22:39:06.928545 [debug] [MainThread]: SQL status: SELECT 1 in 0.675 seconds
+[0m22:39:06.930459 [debug] [MainThread]: On debug: Close
+[0m22:39:06.931901 [info ] [MainThread]:   Connection test: [[32mOK connection ok[0m]
+
+[0m22:39:06.932566 [info ] [MainThread]: [32mAll checks passed![0m
+[0m22:39:06.933150 [info ] [MainThread]: Your new dbt project "dbt_coffee" was created!
+Initialized new project in C:\Users\brenn\Documents\Ilse\Proyecto1LigerInsights\liger_coffee_shop\dbt_coffee\dbt_coffee
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m22:39:06.935424 [debug] [MainThread]: Command `dbt init` succeeded at 22:39:06.934900 after 79.35 seconds
+[0m22:39:06.936408 [debug] [MainThread]: Connection 'debug' was properly closed.
+[0m22:39:06.937252 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001BE5E542B10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001BE5EA33770>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001BE5C984490>]}
+[0m22:39:06.938616 [debug] [MainThread]: Flushing usage events
+[0m22:39:07.498251 [debug] [MainThread]: An error was encountered while trying to flush usage events
