@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: raw # nombre propio inventado para identificar
+    schema: public # donde viven las tablas originales
+    description: "Tablas curdas de la base operativa"
+    tables:
+      - name: orders
+      - name: order_items
