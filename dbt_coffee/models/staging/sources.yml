@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: public
+    tables:
+      - name: branches
+      - name: ingredients
+      - name: products
+      - name: recipes
+      - name: orders
+      - name: order_items
+      - name: purchases
+      - name: inventory_movements
