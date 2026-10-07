@@ -5,4 +5,4 @@ SELECT
     in_or_out,
     payment_method
 FROM {{ source('raw', 'orders') }}
-WHERE created_at IS NOT NULL
+WHERE created_at IS NOT NULL --condición ya creada en la tabla de postgres
