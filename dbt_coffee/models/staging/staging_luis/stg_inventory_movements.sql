@@ -7,6 +7,6 @@ select
     purchase_id,
     occurred_at, 
     cast(occurred_at as date) as movement_date,
-    extract(hour from occurred_at) as movement_hour,
+    date_trunc('week', occurred_at) as movement_week,
     notes as movement_notes
 from {{source('raw', 'inventory_movements')}}
