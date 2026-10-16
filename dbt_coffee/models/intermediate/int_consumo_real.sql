@@ -1,11 +1,9 @@
 select
-    im.movement_week,
-    oi.product_id,
-    sum(im.movement_quantity)*(-1) as consumo_real
-from {{ref('stg_inventory_movements')}} as im
-left join {{ref('stg_order_items')}} as oi
-    on im.order_item_id=oi.order_item_id
-where im.movement_type in ('sale', 'waste')
+    cast(movement_week as date) as movement_week,
+    ingredient_id,
+    -sum(movement_quantity) as consumo_real --el (-1) es por que originalmente las salidas de inventario se denotan con signo negativ
+from {{ref('stg_inventory_movements')}}
+where movement_type in ('sale', 'waste')
 group by
-    im.movement_week,
-    oi.product_id
+    movement_week,
+    ingredient_id
