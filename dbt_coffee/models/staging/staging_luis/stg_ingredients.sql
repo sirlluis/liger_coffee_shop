@@ -3,6 +3,7 @@ SELECT
     name AS ingredient_name,
     unit_of_measure,
     unit_cost AS standard_unit_cost, 
+    category AS ingredient_category, --before category (only products have a column called category)
     par_level,
     is_active
 FROM {{source('raw', 'ingredients')}}
