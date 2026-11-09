@@ -1,9 +1,24 @@
+with fechas as (
+    select generate_series(
+        '2024-09-01'::date,
+        '2026-08-31'::date,
+        interval '1 day'
+    )::date as fecha
+)
+
 select
-    created_at,
-    extract(hour  from created_at) as order_hour,
-    extract(day   from created_at) as order_day,
-    extract(month from created_at) as order_month,
-    extract(year  from created_at) as order_year,
-    extract(isodow   from created_at) as day_of_week
-    -- isodow: día de la semana según ISO 8601 (1 = lunes ... 7 = domingo)
-from {{ ref('stg_orders') }}
+    fecha,
+    extract(year from fecha)::int as year,
+    extract(quarter from fecha)::int as quarter,
+    extract(month from fecha)::int as month,
+    (array['enero','febrero','marzo','abril','mayo','junio','julio',
+           'agosto','septiembre','octubre','noviembre','diciembre'])
+        [extract(month from fecha)::int] as nombre_mes,
+    date_trunc('week', fecha)::date as semana,
+    extract(isodow from fecha)::int as dia_semana,
+    (array['lunes','martes','miércoles','jueves','viernes','sábado','domingo'])
+        [extract(isodow from fecha)::int] as nombre_dia,
+    extract(isodow from fecha) in (6, 7) as es_fin_de_semana
+from fechas
+
+-- isodow: día de la semana según ISO 8601 (1 = lunes ... 7 = domingo)
