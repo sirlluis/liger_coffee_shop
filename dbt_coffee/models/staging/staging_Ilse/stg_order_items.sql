@@ -4,5 +4,5 @@ SELECT
     product_id,
     quantity,
     sale_price,
-    quantity * sale_price AS line_total --New line
+    quantity * sale_price AS line_total --nota: 
 FROM {{ source('raw', 'order_items') }}
