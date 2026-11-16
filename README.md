@@ -1,138 +1,79 @@
-# Liger Coffee Shop ☕
+# Un proyecto para el análisis de una cafetería
 
-> **Borrador de documentación — proyecto en desarrollo.**  
-> Este repositorio se plantea como un proyecto de portafolio para mostrar un flujo de trabajo de análisis de datos y machine learning aplicado a una cafetería. La documentación y la arquitectura se irán ajustando a medida que se implemente el proyecto.
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Power BI](https://img.shields.io/badge/Power_BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
 
-## Objetivo
+# Introducción
+La operación de una cafetería genera valiosa información que puede ser analizada para extraer datos relevantes sobre su dinámica de consumo. En este proyecto se explora el comportamiento de un comercio de bebidas y alimentos usando datos sintéticos que emulan de manera realista la arquitectura operativa de un establecimiento que lleva un control de las ventas y su inventario.
 
-Construir un caso práctico de principio a fin que integre datos de una cafetería con herramientas de ingeniería y análisis de datos. El proyecto busca demostrar conocimientos de:
+# Objetivo
+- Emular la arquitectura de una base de datos operativa para un negocio de venta de bebidas y alimentos.
+- Elaborar un análisis de datos para extraer indicadores clave del desempeño del establecimiento que permitan tomar decisiones informadas.
 
-- **PostgreSQL** para diseñar, almacenar y consultar datos.
-- **Neon** como servicio de PostgreSQL en la nube.
-- **dbt** para transformar datos y organizar modelos analíticos verificables.
-- **Python** para exploración, preparación de datos y machine learning.
-- **Power BI** para comunicar resultados mediante un dashboard.
+# Datos
+Se generaron datos sintéticos para una cafetería que cubre 2 años de operacion (104 semanas), se contempló estacionalidad para implementar un modelo de predicción de demanda. Los patrones de estacionalidad incluidos son:
 
-El caso de uso, las preguntas de negocio y el modelo predictivo concreto están **por definir**; no se deben interpretar como funcionalidades ya implementadas.
+  1. Estacional por categoría: bebidas frías suben en primavera/verano,
+     bebidas calientes suben en otoño/invierno (hemisferio norte, México).
+  2. Día de la semana: viernes/sábado son los días de mayor tráfico,
+     lunes el más bajo.
+  3. Hora del día: picos en desayuno (7-10am) y tarde-café (4-6pm).
+  4. Eventos/temporadas altas: regreso a clases (ago-sep), Día de Muertos,
+     temporada navideña (dic), Día de las Madres (mayo).
+  5. Tendencia de crecimiento: el negocio crece ~12% anual de forma gradual.
 
-## Caso de uso (por definir)
+## Archivos CSV
 
-La idea es modelar información de ventas y operación de una cafetería y convertirla en análisis útiles para el negocio. Algunas preguntas que podrían orientar el proyecto:
+### Conteo de registros
+| Archivo | Registros |
+| --- | ---: |
+| `data/raw/branches.csv` | 2 |
+| `data/raw/ingredients.csv` | 18 |
+| `data/raw/products.csv` | 12 |
+| `data/raw/recipes.csv` | 39 |
+| `data/raw/orders.csv` | 43,267 |
+| `data/raw/order_items.csv` | 66,924 |
+| `data/raw/purchases.csv` | 3,780 |
+| `data/raw/inventory_movements.csv` | 221,941 |
+| `data/processed/orders.csv` | 43,267 |
 
-- ¿Qué productos y categorías generan más ventas e ingresos?
-- ¿Cómo cambian las ventas por fecha, hora o día de la semana?
-- ¿Qué patrones pueden apoyar la planificación de inventario o personal?
-- ¿Es posible estimar la demanda futura a partir del histórico disponible?
+### Datos crudos (`data/raw/`)
+| Archivo | Descripción | Columnas |
+| --- | --- | --- |
+| `branches.csv` | Catálogo de sucursales. | `branch_id`, `name` |
+| `ingredients.csv` | Catálogo de insumos/ingredientes con costo y unidad de medida. | `ingredient_id`, `name`, `unit_of_measure`, `unit_cost`, `category` |
+| `products.csv` | Catálogo de productos vendidos (bebidas/alimentos) y su precio unitario. | `product_id`, `name`, `category`, `unit_price` |
+| `recipes.csv` | Receta/BOM: relación entre productos e ingredientes con cantidad requerida. | `recipe_id`, `product_id`, `ingredient_id`, `quantity_required` |
+| `orders.csv` | Encabezado de órdenes/ventas por sucursal. | `order_id`, `branch_id`, `created_at`, `in_or_out`, `payment_method` |
+| `order_items.csv` | Detalle de productos vendidos en cada orden. | `order_item_id`, `order_id`, `product_id`, `quantity`, `sale_price` |
+| `purchases.csv` | Compras de insumos por sucursal y proveedor (costo real). | `purchase_id`, `ingredient_id`, `branch_id`, `quantity`, `unit_cost_real`, `supplier_name`, `purchased_at` |
+| `inventory_movements.csv` | Movimientos de inventario de insumos (entradas/salidas) y su referencia. | `movement_id`, `ingredient_id`, `movement_type`, `quantity`, `order_item_id`, `purchase_id`, `occurred_at`, `notes` |
 
-Estas preguntas son propuestas iniciales y se concretarán después de revisar los datos y su calidad.
+### Datos procesados (`data/processed/`)
+| Archivo | Descripción | Columnas |
+| --- | --- | --- |
+| `orders.csv` | Versión procesada/exportada de órdenes con la misma estructura base. | `order_id`, `branch_id`, `created_at`, `in_or_out`, `payment_method` | # Metodología
 
-## Arquitectura propuesta
+## La base de datos
+Se utilizó Neon Postgres como base de datos <em>serverless</em> PostgreSQL, con el objetivo de trabajar de forma colaborativa de manera remota, además de aprender como se administra una base de datos en la nube.
 
-```text
-Datos de origen
-      ↓
-PostgreSQL en Neon
-      ↓
-Transformaciones y pruebas con dbt
-      ├──→ Modelos analíticos para Power BI
-      └──→ Datos preparados para análisis y machine learning con Python
-```
+Los datos iniciales se cargaron a Neon desde los archivos `.csv` de `data/` usando el comando `\copy` de `psql`:
 
-La arquitectura es una propuesta para guiar el desarrollo. Las conexiones y los flujos entre herramientas se documentarán cuando estén implementados.
+``` bash
+psql "$DATABASE_URL$" -c "\copy usuarios FROM 'data/usuarios.csv' WITH (FORMAT csv, HEADER true)"
+``` 
 
-## Tecnologías
+Se enviaron de acuerdo al esquema de la base de datos ya que este contiene las dependencias entre las llaves foráneas, reestricciones y disparadores.
 
-| Tecnología | Uso previsto |
-| --- | --- |
-| PostgreSQL | Base de datos relacional y consultas SQL. |
-| Neon | Alojamiento de la base de datos PostgreSQL. |
-| dbt | Transformación, documentación y pruebas de datos. |
-| Python | Análisis exploratorio, preparación de datos y experimentación con modelos de machine learning. |
-| Power BI | Dashboard de indicadores y comunicación de hallazgos. |
-| Jupyter Notebook | Exploración y documentación de experimentos. |
+# Metodología
+# Resultados
+# Tecnologías utilizadas
+Para el desarrollo de este proyecto se utilizó:
+- *Python* para el análisis de datos y modelos de aprendizaje.
+- *PostgreSQL* como el motor de base de datos.
+- *Neon* como la versión PostgreSQL <em>serverless</em> para administrar la base de datos y trabajar de forma colaborativa.
+- *PowerBI* para la creación de <em>dashboards</em> donde se muestran los indicadores clave del negocio.
 
-## Estructura actual del repositorio
-
-```text
-.
-├── data/                 # Directorio para datos del proyecto
-├── dbt_coffee/           # Proyecto dbt (scaffold inicial)
-├── notebook.ipynb        # Notebook de exploración/experimentos
-├── sql/                  # Scripts SQL y estructura de datos
-├── main.py               # Archivo Python inicial
-└── README.md
-```
-
-La estructura puede cambiar conforme avance el trabajo. El proyecto dbt contiene actualmente la estructura inicial de un proyecto; los modelos, pruebas y documentación específicos del caso se completarán durante el desarrollo.
-
-## Estado del proyecto
-
-- [x] Crear la estructura inicial del repositorio.
-- [x] Añadir un notebook y directorios iniciales para SQL, datos y dbt.
-- [ ] Describir el origen, licencia y diccionario de los datos.
-- [ ] Definir el esquema relacional y documentar las decisiones de diseño.
-- [ ] Configurar la conexión a Neon mediante variables de entorno.
-- [ ] Implementar transformaciones, modelos y pruebas con dbt.
-- [ ] Realizar análisis exploratorio y establecer una línea base de machine learning.
-- [ ] Evaluar el modelo con métricas adecuadas al problema elegido.
-- [ ] Crear y publicar un dashboard de Power BI.
-- [ ] Documentar resultados, limitaciones y próximos pasos.
-
-## Requisitos y puesta en marcha
-
-Las instrucciones definitivas se añadirán cuando se establezcan las versiones y dependencias del proyecto. Como preparación, se espera necesitar:
-
-- Python y un entorno virtual.
-- PostgreSQL o una base de datos Neon.
-- dbt con el adaptador de PostgreSQL correspondiente.
-- Power BI Desktop para abrir el archivo del dashboard, cuando se incorpore.
-
-### Configuración segura de Neon
-
-Cuando se implemente la conexión, guardar la cadena de conexión en una variable de entorno local (por ejemplo, `DATABASE_URL`) y no incluir credenciales en el repositorio. Si se usa un archivo `.env`, debe quedar excluido mediante `.gitignore`.
-
-> No hay que copiar credenciales reales a notebooks, archivos SQL, capturas ni documentación pública.
-
-### Comandos dbt (pendientes de configurar)
-
-Desde el directorio `dbt_coffee/`, los comandos habituales para ejecutar un proyecto dbt configurado son:
-
-```bash
-dbt debug
-dbt build
-```
-
-Estos comandos son orientativos: requieren configurar el perfil y las credenciales de conexión antes de ejecutarlos correctamente.
-
-## Datos
-
-La fuente de datos, su licencia, el período cubierto y la descripción de las columnas todavía deben documentarse. Antes de publicar datos, verificar que su licencia permita la redistribución y retirar cualquier información sensible.
-
-## Resultados y entregables (por completar)
-
-- **Análisis:** preguntas de negocio, exploración y principales hallazgos.
-- **Datos:** esquema, transformaciones dbt, pruebas y documentación.
-- **Machine learning:** objetivo, variables, estrategia de validación, métricas y limitaciones.
-- **Dashboard:** enlace o archivo de Power BI e instrucciones para visualizarlo.
-- **Demostración:** capturas o breve explicación del flujo completo.
-
-No se presentan resultados ni métricas en este borrador porque aún deben generarse y validarse.
-
-## Próximos pasos
-
-1. Elegir y documentar un conjunto de datos apropiado para el caso de cafetería.
-2. Definir preguntas de negocio y el esquema de PostgreSQL.
-3. Cargar y validar los datos en Neon.
-4. Crear modelos y pruebas en dbt.
-5. Explorar los datos y seleccionar un problema de machine learning medible.
-6. Construir el dashboard en Power BI y documentar cómo se conecta a los datos.
-7. Añadir resultados reproducibles, imágenes y conclusiones a este README.
-
-## Licencia y contacto
-
-- **Licencia:** pendiente de definir.
-- **Autor:** Luis (`@sirlluis`).
-
----
-
-*Documento de trabajo: actualizar las secciones marcadas como pendientes conforme se implementen y verifiquen las funcionalidades.*
+# Conclusiones
+# Referencias
